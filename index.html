@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FortuneWallet â€” Your Web3 Gateway</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ’Ž</text></svg>">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card: #12121a;
+      --border: #1e1e2e;
+      --gold: #f0b90b;
+      --gold-dim: #c99a05;
+      --text: #e8e8ed;
+      --text-dim: #8888a0;
+      --gradient: linear-gradient(135deg, #f0b90b 0%, #f5d061 50%, #f0b90b 100%);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-glow {
+      position: fixed;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(240,185,11,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: rgba(10,10,15,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .cta-btn {
+      background: var(--gradient);
+      color: #000;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(240,185,11,0.3);
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      background: rgba(240,185,11,0.05);
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+    }
+
+    h1 span {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      max-width: 550px;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+    .btn-outline:hover { border-color: var(--gold); }
+
+    .stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem; }
+
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--text-dim);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card:hover {
+      border-color: var(--gold-dim);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(240,185,11,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+
+    .feature-card p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .chains {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .chain-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      background: var(--card);
+    }
+
+    .chain-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    footer a { color: var(--gold); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .stats { gap: 1.5rem; }
+      .stat-num { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <nav>
+    <div class="logo">FortuneWallet</div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#chains">Chains</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <button class="cta-btn" onclick="window.open('#','_blank')">Launch App</button>
+  </nav>
+
+  <header>
+    <div class="badge">Powered by Web3</div>
+    <h1>Your <span>Fortune</span>,<br>Your Wallet.</h1>
+    <p class="subtitle">
+      A decentralized gateway to manage digital assets across multiple blockchains. 
+      Own your identity. Control your wealth.
+    </p>
+    <div class="hero-actions">
+      <button class="cta-btn" onclick="window.open('#','_blank')">Get Started</button>
+      <button class="btn-outline" onclick="window.open('#','_blank')">Read Docs</button>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Blockchains</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Self-Custody</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Middlemen</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="features">
+    <h2 class="section-title">Built for the Future</h2>
+    <p class="section-sub">Everything you need to navigate the decentralized web, all in one place.</p>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">ðŸ”—</div>
+        <h3>Multi-Chain Support</h3>
+        <p>Manage assets across Ethereum, Polygon, BNB Chain, Base, and Solana from a single interface.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">ðŸ›¡ï¸</div>
+        <h3>Self-Custody</h3>
+        <p>Your keys, your crypto. We never hold or access your funds. Full control, always.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">ðŸŒ</div>
+        <h3>Web3 Domain</h3>
+        <p>Replace complex addresses with human-readable names. Send, receive, and resolve with ease.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">âš¡</div>
+        <h3>Instant Swaps</h3>
+        <p>Trade tokens across chains with aggregated liquidity. Best rates, lowest slippage.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">ðŸ“±</div>
+        <h3>Cross-Platform</h3>
+        <p>Access your wallet from any device. Responsive, fast, and always available.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">ðŸ”’</div>
+        <h3>Privacy First</h3>
+        <p>No KYC, no tracking. Your financial identity stays yours alone.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="chains">
+    <h2 class="section-title">Multi-Chain Ready</h2>
+    <p class="section-sub">Seamlessly operate across the most popular blockchains.</p>
+    <div class="chains">
+      <div class="chain-badge"><span class="chain-dot" style="background:#627eea"></span> Ethereum</div>
+      <div class="chain-badge"><span class="chain-dot" style="background:#8247e5"></span> Polygon</div>
+      <div class="chain-badge"><span class="chain-dot" style="background:#f3ba2f"></span> BNB Chain</div>
+      <div class="chain-badge"><span class="chain-dot" style="background:#0052ff"></span> Base</div>
+      <div class="chain-badge"><span class="chain-dot" style="background:#9945ff"></span> Solana</div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="section-title">About FortuneWallet</h2>
+    <p class="section-sub">
+      FortuneWallet is a Web3-native platform built on the Freename infrastructure. 
+      We believe in a future where digital identity and finance are truly decentralized â€” 
+      no intermediaries, no permission needed, just you and the blockchain.
+    </p>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 FortuneWallet. Built on <a href="https://freename.io" target="_blank">Freename</a>. Deployed on IPFS.</p>
+  </footer>
+</body>
+</html>
